@@ -1,0 +1,49 @@
+{
+  "project": {
+    "name": "Personal Dashboard",
+    "description": "Personal Dashboards powered by Dynamic Knowledge Graphs",
+    "type": "fullstack-web-app"
+  },
+  "structure": {
+    "monorepo": true,
+    "workspaces": ["apps/*", "packages/*"],
+    "main_apps": [
+      "apps/desktop",
+      "apps/pwa", 
+      "apps/mobile",
+      "apps/alexa-skill"
+    ],
+    "backend": "packages/api-server",
+    "shared": "packages/shared-types"
+  },
+  "tech_stack": {
+    "frontend": ["React", "TypeScript", "TailwindCSS"],
+    "desktop": ["Electron"],
+    "mobile": ["React Native"],
+    "backend": ["Node.js", "Fastify"],
+    "databases": ["Neo4j", "MongoDB", "Redis"],
+    "deployment": ["Docker", "Kubernetes", "Vercel", "AWS"]
+  },
+  "development": {
+    "package_manager": "npm",
+    "node_version": ">=18.0.0",
+    "start_command": "npm run dev",
+    "test_command": "npm test",
+    "build_command": "npm run build"
+  },
+  "key_directories": {
+    "documentation": "docs/",
+    "applications": "apps/", 
+    "packages": "packages/",
+    "tests": "tests/",
+    "scripts": "scripts/",
+    "deployment": "deployments/"
+  },
+  "architecture_notes": [
+    "Carousel-based dashboard navigation",
+    "Neo4j for relationship discovery", 
+    "Cross-domain data connections",
+    "Real-time multi-device sync",
+    "Offline-first PWA design"
+  ]
+}

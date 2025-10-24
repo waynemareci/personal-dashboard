@@ -1,0 +1,32 @@
+{
+  "name": "@personal-dashboard/api-server",
+  "version": "1.0.0",
+  "description": "Personal Dashboard API Server",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
+  },
+  "dependencies": {
+    "fastify": "^4.24.0",
+    "@fastify/cors": "^8.4.0",
+    "@fastify/jwt": "^7.2.0",
+    "@fastify/websocket": "^8.3.0",
+    "neo4j-driver": "^5.14.0",
+    "mongodb": "^6.3.0",
+    "zod": "^3.22.0",
+    "pino": "^8.16.0",
+    "bull": "^4.11.0",
+    "ioredis": "^5.3.0"
+  },
+  "devDependencies": {
+    "tsx": "^3.12.7",
+    "tsup": "^7.2.0",
+    "vitest": "^0.34.3",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
