@@ -1,5 +1,6 @@
 import { getNeo4jConnection } from './neo4j';
 import { logger } from '../utils/logger';
+import neo4j from 'neo4j-driver';
 
 /**
  * Cross-domain relationship discovery queries
@@ -234,10 +235,10 @@ export class RelationshipDiscoveryQueries {
     `;
 
     try {
-      const result = await this.connection.executeQuery(query, { 
-        searchTerm, 
-        userId, 
-        limit 
+      const result = await this.connection.executeQuery(query, {
+        searchTerm,
+        userId,
+        limit: neo4j.int(limit) // Neo4j requires Integer type, not JavaScript number
       });
       
       return result.records.map(record => ({
@@ -280,10 +281,10 @@ export class RelationshipDiscoveryQueries {
     `;
 
     try {
-      const result = await this.connection.executeQuery(query, { 
-        entityId, 
-        entityType, 
-        limit 
+      const result = await this.connection.executeQuery(query, {
+        entityId,
+        entityType,
+        limit: neo4j.int(limit) // Neo4j requires Integer type, not JavaScript number
       });
       
       return result.records.map(record => ({

@@ -33,11 +33,11 @@ export class MigrationManager {
     // Create migration tracking node if it doesn't exist
     const initQuery = `
       MERGE (m:MigrationTracker {id: 'main'})
-      ON CREATE SET m.createdAt = datetime(), m.migrations = []
+      ON CREATE SET m.createdAt = $now
       RETURN m
     `;
 
-    await this.connection.executeQuery(initQuery);
+    await this.connection.executeQuery(initQuery, { now: new Date().toISOString() });
     logger.info('Migration tracking system initialized');
   }
 
@@ -66,13 +66,12 @@ export class MigrationManager {
 
   async getAppliedMigrations(): Promise<MigrationRecord[]> {
     const query = `
-      MATCH (m:MigrationTracker {id: 'main'})
-      UNWIND m.migrations as migration
-      RETURN migration.version as version,
-             migration.name as name,
-             migration.appliedAt as appliedAt,
-             migration.checksum as checksum
-      ORDER BY migration.appliedAt
+      MATCH (tracker:MigrationTracker {id: 'main'})-[:APPLIED]->(m:Migration)
+      RETURN m.version as version,
+             m.name as name,
+             m.appliedAt as appliedAt,
+             m.checksum as checksum
+      ORDER BY m.appliedAt
     `;
 
     try {
@@ -93,39 +92,42 @@ export class MigrationManager {
     logger.info(`Applying migration ${migration.version}: ${migration.name}`);
 
     const session = await this.connection.getSession();
-    const transaction = session.beginTransaction();
 
     try {
-      // Execute all migration queries in a transaction
-      for (const query of migration.up) {
-        if (query.trim()) {
-          await transaction.run(query);
-          logger.debug(`Executed: ${query}`);
+      await session.executeWrite(async (transaction) => {
+        // Execute all migration queries in a transaction
+        for (const query of migration.up) {
+          if (query.trim()) {
+            await transaction.run(query);
+            logger.debug(`Executed: ${query}`);
+          }
         }
-      }
 
-      // Record the migration
-      const checksum = this.generateChecksum(migration);
-      const recordQuery = `
-        MATCH (m:MigrationTracker {id: 'main'})
-        SET m.migrations = m.migrations + [{
-          version: $version,
-          name: $name,
-          appliedAt: datetime(),
-          checksum: $checksum
-        }]
-      `;
+        // Record the migration as a separate node with relationship to tracker
+        const checksum = this.generateChecksum(migration);
+        const appliedAt = new Date().toISOString();
+        const recordQuery = `
+          MATCH (tracker:MigrationTracker {id: 'main'})
+          CREATE (m:Migration {
+            version: $version,
+            name: $name,
+            appliedAt: $appliedAt,
+            checksum: $checksum
+          })
+          CREATE (tracker)-[:APPLIED]->(m)
+          RETURN m
+        `;
 
-      await transaction.run(recordQuery, {
-        version: migration.version,
-        name: migration.name,
-        checksum
+        await transaction.run(recordQuery, {
+          version: migration.version,
+          name: migration.name,
+          appliedAt,
+          checksum
+        });
       });
 
-      await transaction.commit();
       logger.info(`Migration ${migration.version} applied successfully`);
     } catch (error) {
-      await transaction.rollback();
       logger.error({ error, migration: migration.version }, 'Failed to apply migration');
       throw error;
     } finally {
@@ -137,29 +139,28 @@ export class MigrationManager {
     logger.info(`Rolling back migration ${migration.version}: ${migration.name}`);
 
     const session = await this.connection.getSession();
-    const transaction = session.beginTransaction();
 
     try {
-      // Execute rollback queries in reverse order
-      for (const query of migration.down.reverse()) {
-        if (query.trim()) {
-          await transaction.run(query);
-          logger.debug(`Executed rollback: ${query}`);
+      await session.executeWrite(async (transaction) => {
+        // Execute rollback queries in reverse order
+        for (const query of migration.down.reverse()) {
+          if (query.trim()) {
+            await transaction.run(query);
+            logger.debug(`Executed rollback: ${query}`);
+          }
         }
-      }
 
-      // Remove migration record
-      const removeQuery = `
-        MATCH (m:MigrationTracker {id: 'main'})
-        SET m.migrations = [migration IN m.migrations WHERE migration.version <> $version]
-      `;
+        // Remove migration node
+        const removeQuery = `
+          MATCH (tracker:MigrationTracker {id: 'main'})-[r:APPLIED]->(m:Migration {version: $version})
+          DELETE r, m
+        `;
 
-      await transaction.run(removeQuery, { version: migration.version });
+        await transaction.run(removeQuery, { version: migration.version });
+      });
 
-      await transaction.commit();
       logger.info(`Migration ${migration.version} rolled back successfully`);
     } catch (error) {
-      await transaction.rollback();
       logger.error({ error, migration: migration.version }, 'Failed to rollback migration');
       throw error;
     } finally {
@@ -192,7 +193,8 @@ export class MigrationManager {
 
   async createMigration(name: string, description: string): Promise<string> {
     const timestamp = new Date();
-    const version = timestamp.toISOString().replace(/[-:.]/g, '').slice(0, 14);
+    // Include milliseconds for uniqueness: YYYYMMDDHHMMSSmmm
+    const version = timestamp.toISOString().replace(/[-:.]/g, '').slice(0, 17);
     const filename = `${version}_${name.replace(/\s+/g, '_').toLowerCase()}.json`;
 
     const migration: Migration = {

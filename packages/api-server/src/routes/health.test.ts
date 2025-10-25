@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Fastify from 'fastify';
 import healthRoutes from './health';
 
@@ -7,8 +7,23 @@ const mockNeo4jConnection = {
   healthCheck: vi.fn().mockResolvedValue({ status: 'healthy', latency: 5 })
 };
 
+// Mock the MongoDB connection
+const mockMongoDBConnection = {
+  healthCheck: vi.fn().mockResolvedValue({ status: 'healthy', latency: 3 }),
+  getStats: vi.fn().mockResolvedValue({
+    database: 'test-db',
+    collections: 10,
+    dataSize: 1024,
+    storageSize: 2048
+  })
+};
+
 vi.mock('../database/neo4j', () => ({
   getNeo4jConnection: vi.fn(() => mockNeo4jConnection)
+}));
+
+vi.mock('../database/mongodb', () => ({
+  getMongoDBConnection: vi.fn(() => mockMongoDBConnection)
 }));
 
 describe('Health Routes', () => {

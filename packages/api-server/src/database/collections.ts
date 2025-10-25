@@ -139,6 +139,49 @@ const COLLECTION_INDEXES: CollectionIndex[] = [
     ]
   },
   {
+    collection: COLLECTIONS.MONTHLY_BUDGETS,
+    indexes: [
+      {
+        spec: { id: 1 },
+        options: { unique: true },
+        name: 'budgets_id_unique',
+        description: 'Unique index on budget ID'
+      },
+      {
+        spec: { userId: 1, month: 1, year: 1 },
+        options: { unique: true },
+        name: 'budgets_user_month_year_unique',
+        description: 'Unique index ensuring one budget per user per month'
+      },
+      {
+        spec: { userId: 1, year: -1, month: -1 },
+        name: 'budgets_user_date',
+        description: 'Index for user budgets by date'
+      }
+    ]
+  },
+  {
+    collection: COLLECTIONS.FINANCIAL_GOALS,
+    indexes: [
+      {
+        spec: { id: 1 },
+        options: { unique: true },
+        name: 'goals_id_unique',
+        description: 'Unique index on goal ID'
+      },
+      {
+        spec: { userId: 1, status: 1, targetDate: 1 },
+        name: 'goals_user_status_target',
+        description: 'Compound index for goal filtering'
+      },
+      {
+        spec: { userId: 1, type: 1 },
+        name: 'goals_user_type',
+        description: 'Index for goals by user and type'
+      }
+    ]
+  },
+  {
     collection: COLLECTIONS.HEALTH_METRICS,
     indexes: [
       {
@@ -171,6 +214,27 @@ const COLLECTION_INDEXES: CollectionIndex[] = [
         spec: { tags: 1 },
         name: 'health_metrics_tags',
         description: 'Index on metric tags'
+      }
+    ]
+  },
+  {
+    collection: COLLECTIONS.HEALTH_GOALS,
+    indexes: [
+      {
+        spec: { id: 1 },
+        options: { unique: true },
+        name: 'health_goals_id_unique',
+        description: 'Unique index on health goal ID'
+      },
+      {
+        spec: { userId: 1, status: 1, targetDate: 1 },
+        name: 'health_goals_user_status_target',
+        description: 'Compound index for health goal filtering'
+      },
+      {
+        spec: { userId: 1, type: 1 },
+        name: 'health_goals_user_type',
+        description: 'Index for health goals by user and type'
       }
     ]
   },
