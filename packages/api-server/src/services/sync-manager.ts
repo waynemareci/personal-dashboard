@@ -420,6 +420,32 @@ export class SyncManager {
   }
 
   /**
+   * Sync a specific entity to connected clients
+   */
+  async syncEntity(
+    entityId: string,
+    domain: 'financial' | 'health' | 'schedule' | 'relationships',
+    entityType: string,
+    action: 'create' | 'update' | 'delete',
+    data?: any
+  ) {
+    const syncEvent: SyncEvent = {
+      type: 'data_change',
+      domain,
+      action,
+      entityId,
+      entityType,
+      data,
+      timestamp: new Date().toISOString(),
+      userId: '', // Will be set when broadcasting to specific users
+      source: 'api'
+    };
+
+    this.broadcastSyncEvent(syncEvent);
+    logger.debug(`Synced ${entityType} entity ${entityId} (${action}) in ${domain} domain`);
+  }
+
+  /**
    * Cleanup sync manager
    */
   cleanup() {
@@ -442,11 +468,26 @@ export class SyncManager {
   }
 }
 
+// Singleton instance
+let syncManagerInstance: SyncManager | null = null;
+
 /**
  * Create and configure sync manager
  */
 export function createSyncManager(fastify: FastifyInstance): SyncManager {
   const syncManager = new SyncManager(fastify);
   syncManager.registerWebSocketRoutes();
+  syncManagerInstance = syncManager;
   return syncManager;
+}
+
+/**
+ * Get the singleton sync manager instance
+ * @throws Error if sync manager hasn't been created yet
+ */
+export function getSyncManager(): SyncManager {
+  if (!syncManagerInstance) {
+    throw new Error('SyncManager not initialized. Call createSyncManager first.');
+  }
+  return syncManagerInstance;
 }

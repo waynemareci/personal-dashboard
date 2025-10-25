@@ -218,7 +218,11 @@ export const CreateHealthMetricSchema = HealthMetricSchema.omit({
   createdAt: true,
   updatedAt: true,
   version: true,
-  neo4jRef: true
+  neo4jRef: true,
+  userId: true
+}).extend({
+  // Accept date strings for API input
+  date: z.string().datetime().or(z.date())
 });
 
 export const CreateMealSchema = MealSchema.omit({
@@ -227,7 +231,11 @@ export const CreateMealSchema = MealSchema.omit({
   createdAt: true,
   updatedAt: true,
   version: true,
-  neo4jRef: true
+  neo4jRef: true,
+  userId: true
+}).extend({
+  // Accept date strings for API input
+  date: z.string().datetime().or(z.date())
 });
 
 export const CreateWorkoutSchema = WorkoutSchema.omit({
@@ -236,7 +244,11 @@ export const CreateWorkoutSchema = WorkoutSchema.omit({
   createdAt: true,
   updatedAt: true,
   version: true,
-  neo4jRef: true
+  neo4jRef: true,
+  userId: true
+}).extend({
+  // Accept date strings for API input
+  date: z.string().datetime().or(z.date())
 });
 
 export const CreateHealthGoalSchema = HealthGoalSchema.omit({
@@ -245,7 +257,11 @@ export const CreateHealthGoalSchema = HealthGoalSchema.omit({
   createdAt: true,
   updatedAt: true,
   version: true,
-  neo4jRef: true
+  neo4jRef: true,
+  userId: true
+}).extend({
+  // Accept date strings for API input
+  targetDate: z.string().datetime().or(z.date()).optional()
 });
 
 export type CreateHealthMetric = z.infer<typeof CreateHealthMetricSchema>;
