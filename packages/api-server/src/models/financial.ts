@@ -167,7 +167,12 @@ export const CreateFinancialTransactionSchema = FinancialTransactionSchema.omit(
   createdAt: true,
   updatedAt: true,
   version: true,
-  neo4jRef: true
+  neo4jRef: true,
+  userId: true
+}).extend({
+  // Accept date strings for API input
+  date: z.string().datetime().or(z.date()),
+  postedDate: z.string().datetime().or(z.date()).optional()
 });
 
 export const CreateMonthlyBudgetSchema = MonthlyBudgetSchema.omit({
