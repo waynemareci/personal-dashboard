@@ -1,0 +1,356 @@
+.relationship-filter {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.filter-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.filter-toggle {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.filter-content {
+  padding: 0 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-section h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.filter-checkbox:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.filter-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.subdomain-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.subdomain-label.financial {
+  color: #10b981;
+}
+
+.subdomain-label.health {
+  color: #ef4444;
+}
+
+.subdomain-label.schedule {
+  color: #3b82f6;
+}
+
+.subdomain-label.relationships {
+  color: #8b5cf6;
+}
+
+.type-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.filter-slider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-slider input[type="range"] {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.filter-slider input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #3b82f6;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.filter-slider input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.filter-slider input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.filter-slider input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3b82f6;
+  min-width: 50px;
+  text-align: right;
+}
+
+.strength-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.legend-item {
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.legend-item.weak {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.legend-item.medium {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.legend-item.strong {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.filter-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.date-inputs {
+  display: flex;
+  gap: 12px;
+}
+
+.date-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.date-field label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.date-field input[type="date"] {
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.date-field input[type="date"]:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #3b82f6;
+}
+
+.date-field input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.date-preset-button {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+}
+
+.date-preset-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.date-preset-button:last-child {
+  margin-right: 0;
+}
+
+.filter-actions {
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reset-button {
+  width: 100%;
+  padding: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  color: #ef4444;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+}
+
+/* Light Theme */
+[data-theme='light'] .relationship-filter {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .filter-header h3,
+[data-theme='light'] .filter-section h4,
+[data-theme='light'] .type-label {
+  color: #000000;
+}
+
+[data-theme='light'] .filter-toggle {
+  background: rgba(0, 0, 0, 0.05);
+  color: #000000;
+}
+
+[data-theme='light'] .filter-toggle:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .filter-checkbox:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme='light'] .filter-slider input[type="range"] {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .date-field label,
+[data-theme='light'] .filter-hint {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme='light'] .date-field input[type="date"] {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #000000;
+}
+
+[data-theme='light'] .date-field input[type="date"]:focus {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='light'] .date-field input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+}
+
+[data-theme='light'] .date-preset-button {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #000000;
+}
+
+[data-theme='light'] .date-preset-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .filter-actions {
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
