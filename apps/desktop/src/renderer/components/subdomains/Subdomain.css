@@ -1,0 +1,663 @@
+/* Subdomain Container */
+.subdomain-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* Subdomain Header */
+.subdomain-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 32px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+}
+
+.subdomain-title-section {
+  flex: 1;
+}
+
+.subdomain-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.subdomain-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.subdomain-description {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.subdomain-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.subdomain-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+}
+
+.subdomain-button.primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.subdomain-button.primary:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.subdomain-button.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.subdomain-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.subdomain-button:active {
+  transform: translateY(0);
+}
+
+/* Subdomain Content */
+.subdomain-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
+}
+
+.subdomain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Card Styles */
+.subdomain-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.subdomain-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.card-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.card-badge.success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.card-badge.info {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.card-action {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card-action:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Stat Rows */
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.stat-value.highlight {
+  color: #10b981;
+}
+
+/* Transaction List (Financial) */
+.transaction-list,
+.workout-list,
+.task-list,
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.transaction-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.transaction-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.transaction-icon.expense {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.transaction-icon.income {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.transaction-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.transaction-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.transaction-date {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.transaction-amount {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.transaction-amount.expense {
+  color: #ef4444;
+}
+
+.transaction-amount.income {
+  color: #10b981;
+}
+
+/* Budget Progress */
+.budget-category,
+.nutrition-macro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.budget-header,
+.macro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.budget-name,
+.macro-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.budget-amount,
+.macro-amount {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.budget-progress,
+.macro-progress {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.budget-bar,
+.macro-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Workout List (Health) */
+.workout-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.workout-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.workout-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.2);
+  font-size: 20px;
+}
+
+.workout-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workout-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.workout-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.workout-time {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+}
+
+/* Goal Items */
+.goal-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.goal-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.goal-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.goal-progress-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.goal-progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.goal-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Task List (Schedule) */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.task-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.task-item.priority-high {
+  border-left-color: #ef4444;
+}
+
+.task-item.priority-medium {
+  border-left-color: #f59e0b;
+}
+
+.task-item.priority-low {
+  border-left-color: #10b981;
+}
+
+.task-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.task-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.task-name.completed {
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.task-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.task-priority {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.task-priority.high {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.task-priority.medium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.task-priority.low {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+/* Event List */
+.event-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.event-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.event-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.event-hour {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.event-period {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.event-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.event-duration {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.event-indicator {
+  width: 4px;
+  height: 40px;
+  border-radius: 2px;
+}
+
+/* Project Progress */
+.project-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.project-percentage {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.project-progress {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.project-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.project-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Light Theme */
+[data-theme='light'] .subdomain-header {
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme='light'] .subdomain-title,
+[data-theme='light'] .card-title,
+[data-theme='light'] .stat-value,
+[data-theme='light'] .transaction-name,
+[data-theme='light'] .workout-name,
+[data-theme='light'] .task-name,
+[data-theme='light'] .event-name,
+[data-theme='light'] .event-hour {
+  color: #000000;
+}
+
+[data-theme='light'] .subdomain-description,
+[data-theme='light'] .stat-label,
+[data-theme='light'] .transaction-date,
+[data-theme='light'] .workout-meta,
+[data-theme='light'] .task-meta,
+[data-theme='light'] .event-period,
+[data-theme='light'] .event-duration {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme='light'] .subdomain-card {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .subdomain-card:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='light'] .subdomain-button.secondary {
+  background: rgba(0, 0, 0, 0.05);
+  color: #000;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .subdomain-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .subdomain-header {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .subdomain-content {
+    padding: 20px;
+  }
+
+  .subdomain-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .subdomain-title {
+    font-size: 24px;
+  }
+
+  .subdomain-icon {
+    font-size: 28px;
+  }
+}

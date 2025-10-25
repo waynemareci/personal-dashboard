@@ -1,0 +1,203 @@
+.carousel-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  position: relative;
+}
+
+.carousel-container {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-container.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.carousel-container.transitioning {
+  pointer-events: none; /* Prevent interactions during transition */
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-slide.active {
+  z-index: 1;
+}
+
+/* Drag Indicator */
+.carousel-drag-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.drag-progress {
+  height: 100%;
+  background: #3b82f6;
+  transition: background-color 0.2s ease;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .carousel-container {
+    touch-action: pan-y; /* Allow vertical scrolling on mobile */
+  }
+}
+
+/* Dark theme (default) */
+[data-theme='dark'] .carousel-wrapper {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+/* Light theme */
+[data-theme='light'] .carousel-wrapper {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+[data-theme='light'] .carousel-drag-indicator {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Accessibility: Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-container {
+    transition: none !important;
+  }
+
+  .carousel-slide {
+    transition: none !important;
+  }
+
+  .drag-progress {
+    transition: none !important;
+  }
+}
+
+/* Performance optimizations */
+.carousel-container,
+.carousel-slide {
+  transform: translateZ(0); /* Force GPU acceleration */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Scrollbar styling for subdomain content */
+.carousel-slide ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.carousel-slide ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.carousel-slide ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.carousel-slide ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme='light'] .carousel-slide ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] .carousel-slide ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='light'] .carousel-slide ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Focus styles for accessibility */
+.carousel-container:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+.carousel-container:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Loading state for entire carousel */
+.carousel-wrapper.loading .carousel-container {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Animation for initial load */
+@keyframes carouselFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.carousel-wrapper {
+  animation: carouselFadeIn 0.4s ease-out;
+}
+
+/* Prevent text selection during drag */
+.carousel-container.dragging * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Slide visibility optimization */
+.carousel-slide:not(.active) {
+  pointer-events: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .carousel-drag-indicator {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .drag-progress {
+    background: #ffffff;
+  }
+
+  [data-theme='light'] .carousel-drag-indicator {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  [data-theme='light'] .drag-progress {
+    background: #000000;
+  }
+}
