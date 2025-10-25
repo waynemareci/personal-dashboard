@@ -1,0 +1,62 @@
+{
+  "version": "20241025120000",
+  "name": "initial_sample_data",
+  "description": "Create sample data and relationships for testing the Personal Dashboard system",
+  "timestamp": "2024-10-25T12:00:00.000Z",
+  "up": [
+    "// Create sample user",
+    "MERGE (user:Person:Entity {id: 'user-1', name: 'John Doe', email: 'john@example.com'}) SET user.createdAt = datetime(), user.type = 'Person'",
+    
+    "// Create sample locations",
+    "MERGE (home:Location:Entity {id: 'loc-1', name: 'Home', type: 'residence'}) SET home.createdAt = datetime(), home.type = 'Location'",
+    "MERGE (office:Location:Entity {id: 'loc-2', name: 'Office', type: 'workplace'}) SET office.createdAt = datetime(), office.type = 'Location'",
+    "MERGE (gym:Location:Entity {id: 'loc-3', name: 'Fitness Center', type: 'gym'}) SET gym.createdAt = datetime(), gym.type = 'Location'",
+    
+    "// Create sample topics/categories",
+    "MERGE (food:Topic:Entity {id: 'topic-1', name: 'Food', category: 'expense'}) SET food.createdAt = datetime(), food.type = 'Topic'",
+    "MERGE (transport:Topic:Entity {id: 'topic-2', name: 'Transportation', category: 'expense'}) SET transport.createdAt = datetime(), transport.type = 'Topic'",
+    "MERGE (fitness:Topic:Entity {id: 'topic-3', name: 'Fitness', category: 'health'}) SET fitness.createdAt = datetime(), fitness.type = 'Topic'",
+    
+    "// Create sample dates",
+    "MERGE (today:Date:Entity {id: 'date-1', value: '2024-10-25', year: 2024, month: 10, day: 25}) SET today.createdAt = datetime(), today.type = 'Date'",
+    "MERGE (yesterday:Date:Entity {id: 'date-2', value: '2024-10-24', year: 2024, month: 10, day: 24}) SET yesterday.createdAt = datetime(), yesterday.type = 'Date'",
+    
+    "// Create sample financial account",
+    "MERGE (account:Account:Entity {id: 'acc-1', name: 'Main Checking', type: 'checking', balance: 2500.00}) SET account.createdAt = datetime(), account.type = 'Account'",
+    
+    "// Create sample transactions",
+    "MERGE (tx1:Transaction:Entity {id: 'tx-1', amount: 15.50, description: 'Lunch at downtown cafe', date: '2024-10-25'}) SET tx1.createdAt = datetime(), tx1.type = 'Transaction'",
+    "MERGE (tx2:Transaction:Entity {id: 'tx-2', amount: 45.00, description: 'Grocery shopping', date: '2024-10-24'}) SET tx2.createdAt = datetime(), tx2.type = 'Transaction'",
+    
+    "// Create sample tasks",
+    "MERGE (task1:Task:Entity {id: 'task-1', title: 'Complete project proposal', status: 'pending', priority: 'high', dueDate: '2024-10-26'}) SET task1.createdAt = datetime(), task1.type = 'Task'",
+    "MERGE (task2:Task:Entity {id: 'task-2', title: 'Gym workout', status: 'completed', priority: 'medium', dueDate: '2024-10-25'}) SET task2.createdAt = datetime(), task2.type = 'Task'",
+    
+    "// Create sample workout",
+    "MERGE (workout1:Workout:Entity {id: 'workout-1', type: 'strength', duration: 60, intensity: 7.5, date: '2024-10-25'}) SET workout1.createdAt = datetime(), workout1.type = 'Workout'",
+    
+    "// Create sample meal",
+    "MERGE (meal1:Meal:Entity {id: 'meal-1', type: 'lunch', calories: 650, date: '2024-10-25'}) SET meal1.createdAt = datetime(), meal1.type = 'Meal'",
+    
+    "// Create relationships",
+    "MATCH (user:Person {id: 'user-1'}), (acc:Account {id: 'acc-1'}) MERGE (user)-[:OWNS]->(acc)",
+    "MATCH (user:Person {id: 'user-1'}), (tx:Transaction {id: 'tx-1'}) MERGE (user)-[:MADE_TRANSACTION]->(tx)",
+    "MATCH (user:Person {id: 'user-1'}), (tx:Transaction {id: 'tx-2'}) MERGE (user)-[:MADE_TRANSACTION]->(tx)",
+    "MATCH (tx:Transaction {id: 'tx-1'}), (food:Topic {id: 'topic-1'}) MERGE (tx)-[:CATEGORIZED_AS]->(food)",
+    "MATCH (tx:Transaction {id: 'tx-2'}), (food:Topic {id: 'topic-1'}) MERGE (tx)-[:CATEGORIZED_AS]->(food)",
+    "MATCH (tx:Transaction {id: 'tx-1'}), (today:Date {id: 'date-1'}) MERGE (tx)-[:OCCURRED_ON]->(today)",
+    "MATCH (tx:Transaction {id: 'tx-2'}), (yesterday:Date {id: 'date-2'}) MERGE (tx)-[:OCCURRED_ON]->(yesterday)",
+    "MATCH (user:Person {id: 'user-1'}), (task:Task {id: 'task-1'}) MERGE (task)-[:ASSIGNED_TO]->(user)",
+    "MATCH (user:Person {id: 'user-1'}), (task:Task {id: 'task-2'}) MERGE (task)-[:ASSIGNED_TO]->(user)",
+    "MATCH (user:Person {id: 'user-1'}), (workout:Workout {id: 'workout-1'}) MERGE (user)-[:DID_WORKOUT]->(workout)",
+    "MATCH (user:Person {id: 'user-1'}), (meal:Meal {id: 'meal-1'}) MERGE (user)-[:ATE_MEAL]->(meal)",
+    "MATCH (workout:Workout {id: 'workout-1'}), (gym:Location {id: 'loc-3'}) MERGE (workout)-[:OCCURRED_AT]->(gym)",
+    "MATCH (workout:Workout {id: 'workout-1'}), (fitness:Topic {id: 'topic-3'}) MERGE (workout)-[:RELATES_TO]->(fitness)",
+    "MATCH (workout:Workout {id: 'workout-1'}), (today:Date {id: 'date-1'}) MERGE (workout)-[:OCCURRED_ON]->(today)",
+    "MATCH (meal:Meal {id: 'meal-1'}), (today:Date {id: 'date-1'}) MERGE (meal)-[:OCCURRED_ON]->(today)"
+  ],
+  "down": [
+    "// Remove sample data (in reverse order)",
+    "MATCH (n:Entity) WHERE n.id STARTS WITH 'user-1' OR n.id STARTS WITH 'loc-' OR n.id STARTS WITH 'topic-' OR n.id STARTS WITH 'date-' OR n.id STARTS WITH 'acc-' OR n.id STARTS WITH 'tx-' OR n.id STARTS WITH 'task-' OR n.id STARTS WITH 'workout-' OR n.id STARTS WITH 'meal-' DETACH DELETE n"
+  ]
+}

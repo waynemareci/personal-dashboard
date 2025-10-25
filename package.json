@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:desktop\" \"npm run dev:pwa\"",
     "dev:api": "npm run dev -w packages/api-server",
-    "dev:desktop": "npm run dev -w apps/desktop", 
+    "dev:desktop": "npm run dev -w apps/desktop",
     "dev:pwa": "npm run dev -w apps/pwa",
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces",
@@ -43,5 +43,10 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "browserslist": "^4.27.0",
+    "caniuse-lite": "^1.0.30001751",
+    "rxjs": "^7.8.2"
   }
 }

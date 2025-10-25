@@ -3,8 +3,9 @@
 echo "Setting up Personal Dashboard development environment..."
 
 # Check Node.js version
-if ! command -v node &> /dev/null; then
+if ! node --version &> /dev/null; then
     echo "❌ Node.js is required. Please install Node.js 18+ first."
+    echo "Current PATH: $PATH"
     exit 1
 fi
 
