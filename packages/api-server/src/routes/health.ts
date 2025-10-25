@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 import { getNeo4jConnection } from '../database/neo4j';
+import { getMongoDBConnection } from '../database/mongodb';
 import { logger } from '../utils/logger';
 
 const healthRoutes: FastifyPluginAsync = async (fastify) => {
@@ -15,7 +16,8 @@ const healthRoutes: FastifyPluginAsync = async (fastify) => {
         uptime: process.uptime(),
         memory: process.memoryUsage(),
         services: {
-          neo4j: { status: 'unknown' as 'healthy' | 'unhealthy' | 'unknown' }
+          neo4j: { status: 'unknown' as 'healthy' | 'unhealthy' | 'unknown' },
+          mongodb: { status: 'unknown' as 'healthy' | 'unhealthy' | 'unknown' }
         }
       };
 
@@ -35,8 +37,25 @@ const healthRoutes: FastifyPluginAsync = async (fastify) => {
         };
       }
 
+      // Check MongoDB connection
+      try {
+        const mongodb = getMongoDBConnection();
+        const mongoHealth = await mongodb.healthCheck();
+        health.services.mongodb = {
+          status: mongoHealth.status,
+          latency: mongoHealth.latency,
+          error: mongoHealth.error
+        };
+      } catch (error) {
+        health.services.mongodb = {
+          status: 'unavailable',
+          error: error instanceof Error ? error.message : 'Connection not initialized'
+        };
+      }
+
       const responseTime = Date.now() - startTime;
-      const isHealthy = health.services.neo4j.status === 'healthy' || health.services.neo4j.status === 'unavailable';
+      const isHealthy = (health.services.neo4j.status === 'healthy' || health.services.neo4j.status === 'unavailable') &&
+                        (health.services.mongodb.status === 'healthy' || health.services.mongodb.status === 'unavailable');
 
       reply
         .code(isHealthy ? 200 : 503)
@@ -60,11 +79,23 @@ const healthRoutes: FastifyPluginAsync = async (fastify) => {
       const neo4j = getNeo4jConnection();
       const neo4jHealth = await neo4j.healthCheck();
 
+      let mongoHealth = { status: 'unavailable', error: 'Connection not initialized' };
+      try {
+        const mongodb = getMongoDBConnection();
+        mongoHealth = await mongodb.healthCheck();
+      } catch (error) {
+        mongoHealth = { 
+          status: 'unavailable', 
+          error: error instanceof Error ? error.message : 'Connection not initialized' 
+        };
+      }
+
       // Get database statistics
       const dbStats = await getDetailedDatabaseStats();
+      const mongoStats = await getMongoDBStats();
 
       const detailedHealth = {
-        status: neo4jHealth.status === 'healthy' ? 'healthy' : 'unhealthy',
+        status: (neo4jHealth.status === 'healthy' && mongoHealth.status === 'healthy') ? 'healthy' : 'unhealthy',
         timestamp: new Date().toISOString(),
         system: {
           uptime: process.uptime(),
@@ -74,12 +105,16 @@ const healthRoutes: FastifyPluginAsync = async (fastify) => {
           platform: process.platform
         },
         services: {
-          neo4j: neo4jHealth
+          neo4j: neo4jHealth,
+          mongodb: mongoHealth
         },
-        database: dbStats
+        database: {
+          neo4j: dbStats,
+          mongodb: mongoStats
+        }
       };
 
-      const isHealthy = neo4jHealth.status === 'healthy';
+      const isHealthy = neo4jHealth.status === 'healthy' && mongoHealth.status === 'healthy';
       reply.code(isHealthy ? 200 : 503).send(detailedHealth);
 
     } catch (error) {
@@ -205,6 +240,26 @@ async function getDetailedDatabaseStats() {
       nodeCount: 0,
       relationshipCount: 0,
       labelDistribution: []
+    };
+  }
+}
+
+async function getMongoDBStats() {
+  try {
+    const mongodb = getMongoDBConnection();
+    const stats = await mongodb.getStats();
+    return stats;
+  } catch (error) {
+    logger.warn({ error }, 'Could not fetch MongoDB stats');
+    return {
+      database: 'unknown',
+      collections: 0,
+      objects: 0,
+      dataSize: 0,
+      storageSize: 0,
+      indexes: 0,
+      indexSize: 0,
+      error: error instanceof Error ? error.message : 'Connection not available'
     };
   }
 }

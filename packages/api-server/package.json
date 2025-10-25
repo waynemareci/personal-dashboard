@@ -11,23 +11,29 @@
     "test:watch": "vitest --watch",
     "db:init": "tsx src/scripts/init-db.ts",
     "db:migrate": "tsx src/scripts/init-db.ts",
-    "db:reset": "echo 'Database reset not implemented - use Neo4j Browser or CLI'"
+    "db:reset": "echo 'Database reset not implemented - use Neo4j Browser or CLI'",
+    "init:dual-db": "tsx src/scripts/init-dual-db.ts",
+    "init:dual-db:fresh": "tsx src/scripts/init-dual-db.ts --drop-existing --seed-data",
+    "init:dual-db:seed": "tsx src/scripts/init-dual-db.ts --seed-data"
   },
   "dependencies": {
     "@fastify/cors": "^10.1.0",
     "@fastify/jwt": "^10.0.0",
     "@fastify/websocket": "^11.2.0",
+    "@types/mongodb": "^4.0.6",
+    "@types/uuid": "^10.0.0",
     "bull": "^4.11.0",
     "dotenv": "^17.2.3",
     "electron": "38.4.0",
     "electron-vite": "4.0.1",
     "fastify": "^5.0.0",
     "ioredis": "^5.3.0",
-    "mongodb": "^6.3.0",
+    "mongodb": "^6.20.0",
     "neo4j-driver": "^5.14.0",
     "pino": "^10.1.0",
+    "uuid": "^13.0.0",
     "vite": "7.1.12",
-    "zod": "^3.22.0"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^20.19.23",
