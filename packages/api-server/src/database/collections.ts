@@ -15,7 +15,10 @@ export const COLLECTIONS = {
   HEALTH_GOALS: 'health_goals',
   TASKS: 'tasks',
   CALENDAR_EVENTS: 'calendar_events',
-  PROJECTS: 'projects'
+  PROJECTS: 'projects',
+  TIME_BLOCKS: 'time_blocks',
+  HABITS: 'habits',
+  HABIT_COMPLETIONS: 'habit_completions'
 } as const;
 
 // Index definitions for each collection
@@ -436,6 +439,117 @@ const COLLECTION_INDEXES: CollectionIndex[] = [
         spec: { name: 'text', description: 'text' },
         name: 'projects_text_search',
         description: 'Text search on project name and description'
+      }
+    ]
+  },
+  {
+    collection: COLLECTIONS.TIME_BLOCKS,
+    indexes: [
+      {
+        spec: { id: 1 },
+        options: { unique: true },
+        name: 'time_blocks_id_unique',
+        description: 'Unique index on time block ID'
+      },
+      {
+        spec: { userId: 1, date: -1, startTime: 1 },
+        name: 'time_blocks_user_date_time',
+        description: 'Compound index for time block scheduling'
+      },
+      {
+        spec: { userId: 1, type: 1, date: -1 },
+        name: 'time_blocks_user_type_date',
+        description: 'Index for time blocks by user, type, and date'
+      },
+      {
+        spec: { taskId: 1 },
+        options: { sparse: true },
+        name: 'time_blocks_task',
+        description: 'Index on linked task ID'
+      },
+      {
+        spec: { projectId: 1 },
+        options: { sparse: true },
+        name: 'time_blocks_project',
+        description: 'Index on linked project ID'
+      },
+      {
+        spec: { recurringGroupId: 1 },
+        options: { sparse: true },
+        name: 'time_blocks_recurring_group',
+        description: 'Index on recurring time block group'
+      },
+      {
+        spec: { completed: 1, userId: 1, date: -1 },
+        name: 'time_blocks_completed_user_date',
+        description: 'Index for completion tracking'
+      }
+    ]
+  },
+  {
+    collection: COLLECTIONS.HABITS,
+    indexes: [
+      {
+        spec: { id: 1 },
+        options: { unique: true },
+        name: 'habits_id_unique',
+        description: 'Unique index on habit ID'
+      },
+      {
+        spec: { userId: 1, isActive: 1 },
+        name: 'habits_user_active',
+        description: 'Index for active habits by user'
+      },
+      {
+        spec: { userId: 1, category: 1 },
+        name: 'habits_user_category',
+        description: 'Index for habits by user and category'
+      },
+      {
+        spec: { userId: 1, frequency: 1 },
+        name: 'habits_user_frequency',
+        description: 'Index for habits by user and frequency'
+      },
+      {
+        spec: { tags: 1 },
+        name: 'habits_tags',
+        description: 'Index on habit tags'
+      },
+      {
+        spec: { name: 'text', description: 'text' },
+        name: 'habits_text_search',
+        description: 'Text search on habit name and description'
+      }
+    ]
+  },
+  {
+    collection: COLLECTIONS.HABIT_COMPLETIONS,
+    indexes: [
+      {
+        spec: { id: 1 },
+        options: { unique: true },
+        name: 'habit_completions_id_unique',
+        description: 'Unique index on completion ID'
+      },
+      {
+        spec: { habitId: 1, date: -1 },
+        name: 'habit_completions_habit_date',
+        description: 'Compound index for habit completion history'
+      },
+      {
+        spec: { userId: 1, habitId: 1, date: -1 },
+        name: 'habit_completions_user_habit_date',
+        description: 'Compound index for user habit completions'
+      },
+      {
+        spec: { userId: 1, date: -1 },
+        name: 'habit_completions_user_date',
+        description: 'Index for all completions by user and date'
+      },
+      {
+        spec: { habitId: 1, completedAt: -1 },
+        name: 'habit_completions_habit_time',
+        description: 'Index for streak calculation'
       }
     ]
   }

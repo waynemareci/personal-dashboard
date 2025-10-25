@@ -12,9 +12,80 @@ vi.mock('../middleware/auth', () => ({
 
 vi.mock('../database/dual-db-coordinator', () => ({
   getDualDatabaseCoordinator: () => ({
-    executeOperation: vi.fn()
+    executeOperation: vi.fn(),
+    createEntity: vi.fn().mockResolvedValue({ success: true, entityId: 'test-id' }),
+    updateEntity: vi.fn().mockResolvedValue({ success: true }),
+    deleteEntity: vi.fn().mockResolvedValue({ success: true })
   })
 }));
+
+vi.mock('../database/mongodb', () => {
+  const createMockChain = () => {
+    const mockToArray = vi.fn().mockResolvedValue([]);
+    const chain: any = {
+      toArray: mockToArray,
+      sort: vi.fn(() => chain),
+      skip: vi.fn(() => chain),
+      limit: vi.fn(() => chain)
+    };
+    return chain;
+  };
+
+  return {
+    getMongoDBConnection: () => ({
+      getDatabase: () => ({
+        collection: () => ({
+          find: vi.fn(() => createMockChain()),
+          findOne: vi.fn().mockResolvedValue(null),
+          countDocuments: vi.fn().mockResolvedValue(0),
+          insertOne: vi.fn().mockResolvedValue({ insertedId: 'test-id' }),
+          updateOne: vi.fn().mockResolvedValue({ modifiedCount: 1 }),
+          deleteOne: vi.fn().mockResolvedValue({ deletedCount: 1 })
+        })
+      })
+    })
+  };
+});
+
+vi.mock('../database/neo4j', () => ({
+  getNeo4jConnection: () => ({
+    executeQuery: vi.fn().mockResolvedValue({ records: [] })
+  })
+}));
+
+vi.mock('../services/sync-manager', () => ({
+  getSyncManager: () => ({
+    syncEntity: vi.fn().mockResolvedValue(undefined)
+  })
+}));
+
+vi.mock('../database/collections', () => ({
+  COLLECTIONS: {
+    TASKS: 'tasks',
+    PROJECTS: 'projects',
+    CALENDAR_EVENTS: 'calendar_events',
+    TIME_BLOCKS: 'time_blocks',
+    HABITS: 'habits',
+    HABIT_COMPLETIONS: 'habit_completions'
+  }
+}));
+
+vi.mock('../models/schedule', async () => {
+  const actual = await vi.importActual('../models/schedule');
+  return {
+    ...actual,
+    calculateHabitStreak: vi.fn().mockReturnValue({ currentStreak: 0, longestStreak: 0, lastCompletedAt: null }),
+    isTaskBlocked: vi.fn().mockReturnValue(false),
+    calculateProjectCompletion: vi.fn().mockReturnValue(0),
+    getTasksDueSoon: vi.fn().mockReturnValue([]),
+    calculateTimeBlockEfficiency: vi.fn().mockReturnValue({
+      totalPlannedMinutes: 0,
+      totalActualMinutes: 0,
+      completionRate: 0,
+      averageRating: 0
+    })
+  };
+});
 
 vi.mock('../utils/logger', () => ({
   logger: {
